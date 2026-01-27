@@ -1,11 +1,27 @@
 import { HomePageLocators } from '../locators/HomePageLocators';
 
 export class HomePage {
+    
     homePageLocators: HomePageLocators;
+    
     constructor() {
         this.homePageLocators = new HomePageLocators();
     }
 
+    /**
+     * Selects a card from the home page menu by name (case-insensitive)
+     * @param cardName - Name of the card to select
+     */
+    selectCardByName(cardName: string) {
+        cy.get(this.homePageLocators.cardsNameList).each(($el, index) => {
+            if ($el.text().toLowerCase().trim() === cardName.toLowerCase().trim()) {
+                cy.get(this.homePageLocators.cardsNameList).eq(index).click();
+                return false; // Break the loop once found
+            }
+        });
+    }
+
+    // Convenience methods for better readability in step definitions
     accessTheElementsFromMenu() {
         this.selectCardByName('Elements');
     }
@@ -25,19 +41,8 @@ export class HomePage {
     accessTheInteractionsFromMenu() {
         this.selectCardByName('Interactions');
     }
+
     accessTheBookStoreFromMenu() {
         this.selectCardByName('Book Store Application');
-    }
-
-    selectCardByName(cardName: string) {
-        let acceptableCardNames = ['Elements', 'Forms', 'Alerts, Frame & Windows', 'Widgets', 'Interactions', 'Book Store Application'];
-        if (!acceptableCardNames.includes(cardName)) {
-            throw new Error(`Card name "${cardName}" is not acceptable. Please use one of the following: ${acceptableCardNames.join(', ')}`);
-        }
-        cy.get(this.homePageLocators.cardsNameList).each(($el, index, $list) => {
-            if ($el.text().toLowerCase() === cardName.toLowerCase()) {
-                cy.get(this.homePageLocators.cardsNameList).eq(index).click();
-            }
-        });
     }
 }

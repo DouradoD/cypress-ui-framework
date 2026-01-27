@@ -12,11 +12,31 @@
 // For example:
 // Cypress.Commands.add('login', (email: string, password: string) => { ... })
 
+// Custom logging commands that output to terminal
+Cypress.Commands.add('terminalLog', (message: string) => {
+  cy.task('log', message);
+});
+
+Cypress.Commands.add('terminalInfo', (message: string) => {
+  cy.task('logInfo', message);
+});
+
+Cypress.Commands.add('terminalError', (message: string) => {
+  cy.task('logError', message);
+});
+
+Cypress.Commands.add('terminalSuccess', (message: string) => {
+  cy.task('logSuccess', message);
+});
+
 // Import types for custom commands
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      terminalLog(message: string): Chainable<void>
+      terminalInfo(message: string): Chainable<void>
+      terminalError(message: string): Chainable<void>
+      terminalSuccess(message: string): Chainable<void>
+    }
+  }
+}

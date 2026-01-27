@@ -1,36 +1,70 @@
-import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { Given, When, Then, Before } from '@badeball/cypress-cucumber-preprocessor';
 import { HomePage } from "../../pages/HomePage";
+import { ElementsPage } from '../../pages/ElementsPage';
+import { Forms } from '../utils/elements/forms';
 
-/*
-    Given he is on the Elements page
-    And he navigates to the "Text Box" section
-    When he fills out the TextBox form with valid data
-    And he submits the form
-    Then the submitted data should be displayed correctly
-*/
+let homePage: HomePage;
+let elementsPage: ElementsPage;
+let forms: Forms;
+
+Before(() => {
+  homePage = new HomePage();
+  elementsPage = new ElementsPage();
+  forms = new Forms("Diogo", "diogo@gmail.com", "Test", "Test");
+});
+
+
 Given('he is on the Elements page', () => {
-  cy.visit('');
-  let homePage = new HomePage();
+  cy.terminalInfo('Given he is on the Elements page');
+  cy.visit('/');
   homePage.accessTheElementsFromMenu();
 });
 
 When('he navigates to the {string} section', (sectionName: string) => {
-  // Implement navigation to the specified section
-  // Example: If sectionName is "Text Box", navigate to that section
-  cy.log(`Navigating to the ${sectionName} section`);
+  cy.terminalInfo(`When he navigates to the ${sectionName} section`);
+  elementsPage.accessTheSubSectionByName(sectionName);
 });
 
 When('he fills out the TextBox form with valid data', () => {
-  // Implement form filling with valid data
-  cy.log('Filling out the TextBox form with valid data');
+  cy.terminalInfo('When he fills out the TextBox form with valid data');
+  elementsPage.fillTextBoxFormWithValidData(forms.fullName, forms.email,
+    forms.currentAddress, forms.permanentAddress);
 });
 
 When('he submits the form', () => {
-  // Implement form submission
-  cy.log('Submitting the form');
+  cy.terminalInfo('When he submits the form');
+  elementsPage.submitTextBoxForm();
 });
 
 Then('the submitted data should be displayed correctly', () => {
-  // Implement verification of the submitted data
-  cy.log('Verifying that the submitted data is displayed correctly');
+  cy.terminalInfo('Then the submitted data should be displayed correctly');
+  elementsPage.verifySubmittedDataIsDisplayedCorrectly(forms.fullName, forms.email,
+    forms.currentAddress, forms.permanentAddress);
 });
+
+When('he expands all checkbox options', () => {
+  cy.terminalInfo('When he expands all checkbox options');
+  elementsPage.expandAllCheckboxes();
+});
+
+When('he selects the {string} checkbox', (checkboxName: string) => {
+  cy.terminalInfo(`When he selects the ${checkboxName} checkbox`);
+  elementsPage.selectCheckboxByName(checkboxName);
+});
+
+Then('the selected option {string} should be displayed correctly', (checkboxName: string) => {
+  cy.terminalInfo(`Then the selected option ${checkboxName} should be displayed correctly`);
+  elementsPage.verifySelectedCheckboxIsDisplayedCorrectly(checkboxName);
+});
+
+When('he selects the {string} radio button', (radioButtonName: string) => {
+  cy.terminalInfo(`When he selects the ${radioButtonName} radio button`);
+  elementsPage.selectRadioButtonByName(radioButtonName);
+});
+
+Then('the selected radio button {string} should be displayed correctly', (radioButtonName: string) => {
+  cy.terminalInfo(`Then the selected radio button ${radioButtonName} should be displayed correctly`);
+  elementsPage.verifySelectedRadioButtonIsDisplayedCorrectly(radioButtonName);
+});
+
+
