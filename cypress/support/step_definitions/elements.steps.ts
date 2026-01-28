@@ -13,16 +13,15 @@ Before(() => {
   forms = new Forms("Diogo", "diogo@gmail.com", "Test", "Test");
 });
 
-
 Given('he is on the Elements page', () => {
   cy.terminalInfo('Given he is on the Elements page');
   cy.visit('/');
   homePage.accessTheElementsFromMenu();
 });
 
-When('he navigates to the {string} section', (sectionName: string) => {
-  cy.terminalInfo(`When he navigates to the ${sectionName} section`);
-  elementsPage.accessTheSubSectionByName(sectionName);
+When('he navigates to the {string} subSection from Elements', (subSectionName: string) => {
+  cy.terminalInfo(`When he navigates to the "${subSectionName}" subSection from Elements`);
+  elementsPage.accessTheSubSectionByName(subSectionName);
 });
 
 When('he fills out the TextBox form with valid data', () => {
