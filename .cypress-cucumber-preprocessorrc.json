@@ -1,0 +1,16 @@
+{
+  "stepDefinitions": ["cypress/support/step_definitions/*.steps.ts"],
+  "messages": {
+    "enabled": true,
+    "output": "cypress/cucumber-messages/run.ndjson"
+  },
+  "json": {
+    "enabled": true,
+    "output": "cypress/reports/cucumber-json"
+  },
+  "filterSpecs": true,
+  "omitFiltered": true,
+  "pretty": {
+    "enabled": true
+  }
+}

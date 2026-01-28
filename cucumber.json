@@ -3,7 +3,7 @@
     "requireModule": ["ts-node/register"],
     "require": [
       "cypress/support/e2e.ts",
-      "cypress/e2e/steps/**/*.ts"
+      "cypress/support/step_definitions/**/*.steps.ts"
     ],
     "format": [
       "html:cucumber-report.html",

@@ -1,3 +1,5 @@
 node_modules
 .vscode
 cypress/videos
+cypress/reports
+cypress/cucumber-messages
