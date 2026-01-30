@@ -24,7 +24,6 @@ Feature: Widgets
     Then the Auto Complete widget should display the options containing the substring "<substring>"
 
     Examples:
-    //TODO: Only substring from colors
       | substring |
       | Red       |
       | Bl        |

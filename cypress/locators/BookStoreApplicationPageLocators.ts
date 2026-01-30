@@ -3,5 +3,5 @@ export class BookStoreApplicationPageLocators {
     sectionListNames: string = "#app div[class='element-group'] div[class='header-text']";
     subSectionListNames: string = "#app div[class='element-list collapse show'] span[class='text']";
 
-    // Login, Book Store - placeholders as needed
+    // Login, Book Store - add locators when implementing
 }

@@ -1,5 +1,4 @@
 // cypress/support/e2e.ts
-// Add this at the VERY TOP of the file
 
 import 'cypress-mochawesome-reporter/register';
 

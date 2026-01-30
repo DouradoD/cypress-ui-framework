@@ -85,7 +85,7 @@ module.exports = defineConfig({
       // Simple URL blocking - add endpoints you want to ignore
       on('before:browser:launch', (browser, launchOptions) => {
         if (browser.name === 'chrome') {
-          // Block specific domains (like the Criteo one you mentioned)
+          // Block ad/tracking domains (e.g. Criteo)
           launchOptions.args.push('--disable-background-networking');
 
           // Enable request blocking
