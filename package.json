@@ -5,6 +5,7 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:run:all": "cypress run --browser chrome",
+    "cy:clean:reports": "node -e \"const fs=require('fs');const p=require('path');['cypress/reports/cucumber-json','cypress/reports/cucumber-html'].forEach(d=>{if(fs.existsSync(d)){fs.rmSync(d,{recursive:true});console.log('Cleaned '+d)}})\"",
     "cy:debug": "node --inspect-brk node_modules/.bin/cypress open",
     "cy:debug:run": "node --inspect node_modules/.bin/cypress run --spec",
     "cy:debug:feature": "node --inspect node_modules/.bin/cypress run --browser chrome --spec",

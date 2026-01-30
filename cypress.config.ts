@@ -8,10 +8,12 @@ const { createEsbuildPlugin } = require('@badeball/cypress-cucumber-preprocessor
 module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://demoqa.com',
-    specPattern: '**/*.feature',
+    specPattern: ['**/*.feature', 'cypress/e2e/api/**/*.spec.ts'],
     supportFile: 'cypress/support/e2e.ts',
     viewportWidth: 1920,
     viewportHeight: 1080,
+    defaultCommandTimeout: 15000,
+    downloadsFolder: 'cypress/downloads',
 
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config, {
@@ -28,6 +30,29 @@ module.exports = defineConfig({
         },
         pretty: true,
         verbose: true
+      });
+
+      // Clean report folders before each run
+      on('before:run', () => {
+        const fs = require('fs');
+        const projectRoot = config.projectRoot || process.cwd();
+        const jsonDir = path.join(projectRoot, 'cypress/reports/cucumber-json');
+        const htmlDir = path.join(projectRoot, 'cypress/reports/cucumber-html');
+
+        if (fs.existsSync(jsonDir)) {
+          fs.readdirSync(jsonDir).forEach((file) => {
+            const filePath = path.join(jsonDir, file);
+            if (fs.statSync(filePath).isFile()) {
+              fs.unlinkSync(filePath);
+            }
+          });
+          console.log('🧹 Cleaned cucumber-json folder');
+        }
+
+        if (fs.existsSync(htmlDir)) {
+          fs.rmSync(htmlDir, { recursive: true });
+          console.log('🧹 Cleaned cucumber-html folder');
+        }
       });
 
       // Generate JSON files from messages and create HTML report
@@ -243,7 +268,7 @@ module.exports = defineConfig({
         return launchOptions;
       });
 
-      // Add custom task for terminal logging
+      // Add custom tasks for terminal logging and file operations
       on('task', {
         log(message) {
           console.log(message);
@@ -259,6 +284,14 @@ module.exports = defineConfig({
         },
         logSuccess(message) {
           console.log(`✅ - ${message}`);
+          return null;
+        },
+        deleteFile(filePath) {
+          const fs = require('fs');
+          const fullPath = path.join(config.projectRoot || process.cwd(), filePath);
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+          }
           return null;
         }
       });

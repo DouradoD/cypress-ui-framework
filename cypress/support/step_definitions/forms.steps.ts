@@ -1,7 +1,7 @@
 import { Given, When, Then, Before } from '@badeball/cypress-cucumber-preprocessor';
 import { HomePage } from '../../pages/HomePage';
 import { FormsPage, PracticeFormUserInfo } from '../../pages/FormsPage';
-import { UserInfo } from './user_info';
+import { UserInfo } from '../utils/user_info';
 
 let homePage: HomePage;
 let formsPage: FormsPage;
@@ -18,18 +18,15 @@ Before(() => {
 });
 
 Given('he is on the Forms page', () => {
-  cy.terminalInfo('Given he is on the Forms page');
   cy.visit('/');
   homePage.accessTheFormsFromMenu();
 });
 
 When('he navigates to the {string} subSection from Forms', (subSectionName: string) => {
-  cy.terminalInfo(`When he navigates to the "${subSectionName}" subSection from Forms`);
   formsPage.accessTheSubSectionByName(subSectionName);
 });
 
 When('he fills out the Practice Form with valid data', () => {
-  cy.terminalInfo('When he fills out the Practice Form with valid data');
   const data: PracticeFormUserInfo = {
     firstName: practiceFormUser.firstName,
     lastName: practiceFormUser.lastName,
@@ -48,7 +45,6 @@ When('he fills out the Practice Form with valid data', () => {
 
 
 Then('the submitted data from practice form should be displayed correctly', () => {
-  cy.terminalInfo('Then the submitted data from practice form should be displayed correctly');
   const data: PracticeFormUserInfo = {
     firstName: practiceFormUser.firstName,
     lastName: practiceFormUser.lastName,
@@ -59,4 +55,13 @@ Then('the submitted data from practice form should be displayed correctly', () =
     address: practiceFormUser.address,
   };
   formsPage.verifySubmittedDataFromPracticeForm(data);
+});
+
+Then('all required fields from practice form should be displayed in red color', () => {
+    cy.task('log', { level: 'info', message: 'CONSOLE: all required fields from practice form should be displayed in red color' });
+    formsPage.verifyAllRequiredFieldsAreDisplayedInRedColor();
+});
+
+Then('all required fields from practice form should be displayed with alert icon', () => {
+    formsPage.verifyAllRequiredFieldsAreDisplayedWithAlertIcon();
 });

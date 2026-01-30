@@ -26,4 +26,32 @@ export class ElementsPageLocators {
     noRadioButton: string = 'label[for="noRadio"]';
     selectedRadioButtonOutput: string = 'span[class="text-success"]';
 
+    // web tables locators
+    rowsPerPageSelect: string = 'select[aria-label*="rows per page"]';
+    webTableSearchInput: string = '#searchBox';
+    webTableFormFirstNameInput: string = '#firstName';
+    webTableFormLastNameInput: string = '#lastName';
+    webTableFormEmailInput: string = '#userEmail';
+    webTableFormAgeInput: string = '#age';
+    webTableFormSalaryInput: string = '#salary';
+    webTableFormDepartmentInput: string = '#department';
+    webTableFormSubmitButton: string = '#submit';
+    webTableAddNewUserButton: string = '#addNewRecordButton';
+    webTableNextButton: string = 'div[class="-next"] button';
+    webTableTotalPage: string = 'span[class="-totalPages"]';
+
+    webTableRowList: string = 'div[class="rt-tr-group"]';
+    webTableRowTextValues: string = 'div.rt-td';
+    webTableRowDeleteIconButtonList: string = 'span[id^="delete-record"]';
+
+    // Dynamic properties locators
+    visibleAfter5SecondsButton: string = '#visibleAfter';
+    colorChangeButton: string = '#colorChange';
+    willEnable5SecondsButton: string = '#enableAfter';
+
+    // Upload and download locators
+    downloadFileButton: string = '#downloadButton';
+    uploadFileButton: string = '#uploadFile';
+    uploadedFileNameOutputText: string = '#uploadedFilePath';
+
 }

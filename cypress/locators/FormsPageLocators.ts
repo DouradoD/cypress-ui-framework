@@ -7,7 +7,7 @@ export class FormsPageLocators {
     firstNameInput: string = '#firstName';
     lastNameInput: string = '#lastName';
     userEmailInput: string = '#userEmail';
-    genderRadio: string = 'input[name="gender"]';
+    genderRadio: string = 'label[for^="gender"]';
     mobileNumberInput: string = '#userNumber';
     openCalendarButton: string = '#dateOfBirthInput';
     selectYearDropdown: string = 'div[class="react-datepicker"] select[class*="year"]';
@@ -22,4 +22,8 @@ export class FormsPageLocators {
 
     // Practice Form output
     outputTable: string = '.table';
+
+    // Required fields locators
+    practiceFormAfterSubmit: string = '#userForm[class="was-validated"]';
+    requiredFields: string = 'div[class="practice-form-wrapper"] [required]';
 }

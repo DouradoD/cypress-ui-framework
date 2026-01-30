@@ -1,5 +1,5 @@
 import { ElementsPageLocators } from '../locators/ElementsPageLocators';
-
+import { UserInfo } from '../support/utils/elements/userInfo';
 export class ElementsPage {
 
     elementPageLocators: ElementsPageLocators;
@@ -37,18 +37,18 @@ export class ElementsPage {
     }
 
     accessTheSubSectionByName(subSectionName: string) {
-        cy.terminalInfo(`Looking for sub-section: ${subSectionName}`);
+        cy.task('log', { level: 'info', message: `Looking for sub-section: ${subSectionName}` });
         let clicked = false;
         cy.get(this.elementPageLocators.subSectionListNames).each(($el) => {
             if ($el.text().trim() === subSectionName.trim()) {
                 clicked = true;
                 cy.wrap($el).click();
-                cy.terminalSuccess(`Clicked on: ${subSectionName}`);
+                cy.task('log', { level: 'success', message: `Clicked on: ${subSectionName}` });
                 return false; // Break the loop
             }
         }).then(() => {
             if (!clicked) {
-                cy.terminalError(`Sub-section with name "${subSectionName}" not found.`);
+                cy.task('log', { level: 'error', message: `Sub-section with name "${subSectionName}" not found.` });
                 throw new Error(`Sub-section with name "${subSectionName}" not found.`);
             }
         });
@@ -56,12 +56,12 @@ export class ElementsPage {
 
 
     fillTextBoxFormWithValidData(fullname: string, email: string, currentAddress: string, permanentAddress: string) {
-        cy.terminalInfo(`Filling form with: ${fullname}, ${email}, ${currentAddress}, ${permanentAddress}`);
+        cy.task('log', { level: 'info', message: `Filling form with: ${fullname}, ${email}, ${currentAddress}, ${permanentAddress}` });
         cy.get(this.elementPageLocators.fullNameInput).clear().type(fullname);
         cy.get(this.elementPageLocators.emailInput).clear().type(email);
         cy.get(this.elementPageLocators.currentAddressInput).clear().type(currentAddress);
         cy.get(this.elementPageLocators.permanentAddressInput).clear().type(permanentAddress);
-        cy.terminalSuccess('Form fields filled');
+        cy.task('log', { level: 'success', message: 'Form fields filled' });
     }
 
     submitTextBoxForm() {
@@ -69,7 +69,7 @@ export class ElementsPage {
     }
 
     verifySubmittedDataIsDisplayedCorrectly(fullname: string, email: string, currentAddress: string, permanentAddress: string) {
-        cy.terminalInfo('Starting form verification...');
+        cy.task('log', { level: 'info', message: 'Starting form verification...' });
 
         const fieldChecks = [
             { name: 'Full Name', locator: this.elementPageLocators.outputFormName, expected: fullname },
@@ -80,22 +80,22 @@ export class ElementsPage {
 
         // Verify each field sequentially using Cypress assertions
         fieldChecks.forEach((field) => {
-            cy.terminalInfo(`Checking ${field.name} field...`);
+            cy.task('log', { level: 'info', message: `Checking ${field.name} field...` });
             cy.get(field.locator)
                 .invoke('text')
                 .then(text => {
-                    cy.terminalLog(`${field.name} field text: "${text}"`);
+                    cy.task('log', { level: 'log', message: `${field.name} field text: "${text}"` });
                     expect(text.trim(), `${field.name} should end with "${field.expected}"`).to.include(field.expected);
                 });
         });
 
         // Summary log
         cy.then(() => {
-            cy.terminalInfo(`=== Form Verification Results ===`);
+            cy.task('log', { level: 'info', message: '=== Form Verification Results ===' });
             fieldChecks.forEach(field => {
-                cy.terminalInfo(`${field.name}: ✅ PASS`);
+                cy.task('log', { level: 'info', message: `${field.name}: ✅ PASS` });
             });
-            cy.terminalSuccess('All fields displayed the submitted data correctly.');
+            cy.task('log', { level: 'success', message: 'All fields displayed the submitted data correctly.' });
         });
     }
 
@@ -108,13 +108,13 @@ export class ElementsPage {
     }
 
     verifySelectedCheckboxIsDisplayedCorrectly(option: string) {
-        cy.terminalInfo(`Verifying selected checkbox option: ${option}`);
+        cy.task('log', { level: 'info', message: `Verifying selected checkbox option: ${option}` });
         cy.get(this.elementPageLocators.selectedCheckboxesOutput).invoke('text').then(text => {
             const checkboxOutput = text.trim();
-            cy.terminalInfo(`Checkbox output: ${checkboxOutput} and option: ${option}`);
+            cy.task('log', { level: 'info', message: `Checkbox output: ${checkboxOutput} and option: ${option}` });
             expect(checkboxOutput.toLowerCase()).to.contain(option.toLowerCase());
         });
-        cy.terminalSuccess(`Checkbox option "${option}" is displayed correctly.`);
+        cy.task('log', { level: 'success', message: `Checkbox option "${option}" is displayed correctly.` });
     }
 
     selectRadioButtonByName(option: string) {
@@ -137,9 +137,118 @@ export class ElementsPage {
             .invoke('text')
             .then(text => {
                 const selectedOption = text.trim().toLowerCase();
-                cy.terminalLog(`Selected radio button displayed: ${selectedOption}`);
+                cy.task('log', { level: 'log', message: `Selected radio button displayed: ${selectedOption}` });
                 expect(selectedOption).to.equal(expectedOption, `Radio button option "${option}" should be displayed correctly`);
-                cy.terminalSuccess(`Radio button option "${option}" is displayed correctly.`);
+                cy.task('log', { level: 'success', message: `Radio button option "${option}" is displayed correctly.` });
             });
+    }
+
+    selectLimitPageSize(limitPageSize: string) {
+        cy.get(this.elementPageLocators.rowsPerPageSelect).select(limitPageSize);
+    }
+
+    addNewUsersWithValidData(userList: UserInfo[]) {
+        userList.forEach(user => {
+            cy.get(this.elementPageLocators.webTableAddNewUserButton).click();
+            this.fillNewUserFormWithValidData(user);
+            this.submitNewUserForm();
+        });
+    }
+
+    fillNewUserFormWithValidData(user: UserInfo) {
+        cy.get(this.elementPageLocators.webTableFormFirstNameInput).clear().type(user.firstName);
+        cy.get(this.elementPageLocators.webTableFormLastNameInput).clear().type(user.lastName);
+        cy.get(this.elementPageLocators.emailInput).clear().type(user.email);
+        cy.get(this.elementPageLocators.webTableFormAgeInput).clear().type(user.age);
+        cy.get(this.elementPageLocators.webTableFormSalaryInput).clear().type(user.salary);
+        cy.get(this.elementPageLocators.webTableFormDepartmentInput).clear().type(user.department);
+    }
+
+    submitNewUserForm() {
+        cy.get(this.elementPageLocators.submitButton).click();
+    }
+
+
+    removeNewUserFromTheTable(user: UserInfo) {
+        cy.task('log', { level: 'info', message: `Removing user from table: ${user.firstName}, ${user.lastName}` });
+        cy.contains(this.elementPageLocators.webTableRowList, user.firstName)
+            .find(this.elementPageLocators.webTableRowDeleteIconButtonList)
+            .click();
+        cy.task('log', { level: 'success', message: `User "${user.firstName}" removed from table` });
+    }
+
+    searchForUser(user: UserInfo) {
+        cy.get(this.elementPageLocators.webTableSearchInput).clear().type(user.firstName);
+    }
+
+    verifyNextButtonIsEnabled() {
+        cy.get(this.elementPageLocators.webTableNextButton).should('be.enabled');
+    }
+
+    verifyTotalPageIsDisplayedCorrectly(totalPage: string) {
+        cy.get(this.elementPageLocators.webTableTotalPage).should('have.text', totalPage);
+    }
+
+    /**
+     * Verifies the user is displayed in the Web Table using Cypress command chain.
+     * Cypress chain: commands queue and run in order; .should() retries until pass or timeout.
+     */
+    verifyTheFirstUserIsDiplayedCorrectlyInTheOutcomeTable(user: UserInfo) {
+        cy.task('log', { level: 'info', message: `Verifying user in table: ${user.firstName}, ${user.lastName}, ${user.email}` });
+        // Find the row group containing user's first name, then assert each cell
+        cy.contains(this.elementPageLocators.webTableRowList, user.firstName)
+            .within(() => {
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(0).should('contain.text', user.firstName.trim());
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(1).should('contain.text', user.lastName.trim());
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(2).should('contain.text', user.age.trim());
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(3).should('contain.text', user.email.trim());
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(4).should('contain.text', user.salary.trim());
+                cy.get(this.elementPageLocators.webTableRowTextValues).eq(5).should('contain.text', user.department.trim());
+            });
+        cy.task('log', { level: 'success', message: 'User is displayed correctly in the outcome table' });
+    }
+
+    /**
+     * Verifies the user is NOT displayed in the Web Table using Cypress chain.
+     */
+    verifyUserIsNotDisplayedInTheTable(user: UserInfo) {
+        cy.task('log', { level: 'info', message: `Verifying user is NOT in table: ${user.firstName}, ${user.lastName}` });
+        cy.get(this.elementPageLocators.webTableRowList)
+            .should('not.contain', user.firstName);
+        cy.task('log', { level: 'success', message: 'User is not displayed in the table' });
+    }
+
+    verifyVisibleAfter5SecondsButtonIsDisplayed() {
+        cy.get(this.elementPageLocators.visibleAfter5SecondsButton).should('be.visible');
+    }
+
+    verifyColorChangeButtonIsDisplayedInRedColor() {
+        cy.get(this.elementPageLocators.colorChangeButton).should('have.css', 'color', 'rgb(220, 53, 69)');
+    }
+
+    verifyWillEnable5SecondsButtonIsEnabled() {
+        cy.get(this.elementPageLocators.willEnable5SecondsButton).should('be.enabled');
+    }
+
+    downloadFile() {
+        cy.get(this.elementPageLocators.downloadFileButton).click();
+        // TODO: Check if the file is downloaded
+        if(cy.readFile('cypress/downloads/sampleFile.jpeg').then(file => file.length > 0)) {
+            cy.task('log', { level: 'success', message: 'File was downloaded' });
+        } else {
+            cy.task('log', { level: 'error', message: 'File was not downloaded' });
+            throw new Error('File was not downloaded');
+        }
+    }
+
+    uploadFileTheSameFileThatWasDownloaded() {
+        let downloadFilePath = 'cypress/downloads/sampleFile.jpeg';
+        cy.get(this.elementPageLocators.uploadFileButton).selectFile(downloadFilePath);
+        cy.task('deleteFile', downloadFilePath);
+        cy.task('log', { level: 'success', message: 'File was Uploaded and deleted from the downloads folder' });
+    }
+
+    verifyUploadedFileNameIsDisplayedBellowTheUploadButton() {
+        cy.get(this.elementPageLocators.uploadedFileNameOutputText).should('contain.text', 'sampleFile.jpeg');
     }
 }

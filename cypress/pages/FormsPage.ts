@@ -48,7 +48,7 @@ export class FormsPage {
     }
 
     accessTheSubSectionByName(subSectionName: string) {
-        cy.terminalInfo(`Looking for sub-section: ${subSectionName}`);
+        cy.task('log', { level: 'info', message: `Looking for sub-section: ${subSectionName}` });
         this.clickElementByText(this.formsPageLocators.subSectionListNames, subSectionName, 'SubSection');
     }
 
@@ -60,7 +60,7 @@ export class FormsPage {
     }
 
     fillPracticeFormWithValidData(userInfo: PracticeFormUserInfo) {
-        cy.terminalInfo('Filling Practice Form with valid data');
+        cy.task('log', { level: 'info', message: 'Filling Practice Form with valid data' });
         cy.get(this.formsPageLocators.firstNameInput).clear().type(userInfo.firstName);
         cy.get(this.formsPageLocators.lastNameInput).clear().type(userInfo.lastName);
         cy.get(this.formsPageLocators.userEmailInput).clear().type(userInfo.email);
@@ -80,11 +80,11 @@ export class FormsPage {
         if (userInfo.city) {
             cy.get(this.formsPageLocators.cityDropdown).type(userInfo.city + '{enter}');
         }
-        cy.terminalSuccess('Practice Form fields filled');
+        cy.task('log', { level: 'success', message: 'Practice Form fields filled' });
     }
 
     verifySubmittedDataFromPracticeForm(userInfo: PracticeFormUserInfo) {
-        cy.terminalInfo('Verifying submitted data from Practice Form');
+        cy.task('log', { level: 'info', message: 'Verifying submitted data from Practice Form' });
         cy.get(this.formsPageLocators.outputTable).within(() => {
             cy.contains(userInfo.firstName).should('be.visible');
             cy.contains(userInfo.lastName).should('be.visible');
@@ -92,7 +92,31 @@ export class FormsPage {
             cy.contains(userInfo.mobileNumber).should('be.visible');
             cy.contains(userInfo.address).should('be.visible');
         });
-        cy.terminalSuccess('Submitted data from Practice Form is displayed correctly');
+        cy.task('log', { level: 'success', message: 'Submitted data from Practice Form is displayed correctly' });
+    }
+
+    verifyAllRequiredFieldsAreDisplayedInRedColor() {
+        // wait until the practiceFormAfterSubmit be visible
+        cy.get(this.formsPageLocators.practiceFormAfterSubmit).should('be.visible');
+        let color = 'rgb(220, 53, 69)';
+        cy.task('log', { level: 'info', message: 'Verifying all required fields are displayed in red color' });
+        cy.get(this.formsPageLocators.firstNameInput).should('have.css', 'border-color', color);
+        cy.get(this.formsPageLocators.lastNameInput).should('have.css', 'border-color', color);
+        cy.get(this.formsPageLocators.genderRadio).each(($el) => {
+            expect($el).to.have.css('color', color);
+        });
+        cy.get(this.formsPageLocators.mobileNumberInput).should('have.css', 'border-color', color);
+        cy.task('log', { level: 'success', message: `All required fields are displayed in ${color} color` });
+    }
+
+    verifyAllRequiredFieldsAreDisplayedWithAlertIcon() {
+        // The SVG path data (without quotes) - CSS values are URL-encoded, so we search for the raw path
+        let invalidIconCode = 'M5.8 3.6h.4L6 6.5z';
+        cy.task('log', { level: 'info', message: 'Verifying all required fields are displayed with alert icon' });
+        cy.get(this.formsPageLocators.firstNameInput).should('have.css', 'background-image').and('include', invalidIconCode);
+        cy.get(this.formsPageLocators.lastNameInput).should('have.css', 'background-image').and('include', invalidIconCode);
+        cy.get(this.formsPageLocators.mobileNumberInput).should('have.css', 'background-image').and('include', invalidIconCode);
+        cy.task('log', { level: 'success', message: 'All required fields are displayed with alert icon' });
     }
 
 }

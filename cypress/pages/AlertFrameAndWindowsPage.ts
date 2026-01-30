@@ -34,18 +34,18 @@ export class AlertFrameAndWindowsPage {
     }
 
     accessTheSubSectionByName(subSectionName: string) {
-        cy.terminalInfo(`Looking for sub-section: ${subSectionName}`);
+        cy.task('log', { level: 'info', message: `Looking for sub-section: ${subSectionName}` });
         let clicked = false;
         cy.get(this.alertFrameAndWindowsPageLocators.subSectionListNames).each(($el) => {
             if ($el.text().trim() === subSectionName.trim()) {
                 clicked = true;
                 cy.wrap($el).click();
-                cy.terminalSuccess(`Clicked on: ${subSectionName}`);
+                cy.task('log', { level: 'success', message: `Clicked on: ${subSectionName}` });
                 return false;
             }
         }).then(() => {
             if (!clicked) {
-                cy.terminalError(`Sub-section with name "${subSectionName}" not found.`);
+                cy.task('log', { level: 'error', message: `Sub-section with name "${subSectionName}" not found.` });
                 throw new Error(`Sub-section with name "${subSectionName}" not found.`);
             }
         });

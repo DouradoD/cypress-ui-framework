@@ -34,7 +34,7 @@ export class WidgetsPage {
     }
 
     accessTheSubSectionByName(subSectionName: string) {
-        cy.terminalInfo(`Looking for sub-section: ${subSectionName}`);
+        cy.task('log', { level: 'info', message: `Looking for sub-section: ${subSectionName}` });
         const normalized = subSectionName.trim();
         const alias = normalized === 'Accordion' ? 'Accordian' : null;
         let clicked = false;
@@ -43,12 +43,12 @@ export class WidgetsPage {
             if (text === normalized || (alias && text === alias)) {
                 clicked = true;
                 cy.wrap($el).click();
-                cy.terminalSuccess(`Clicked on: ${subSectionName}`);
+                cy.task('log', { level: 'success', message: `Clicked on: ${subSectionName}` });
                 return false;
             }
         }).then(() => {
             if (!clicked) {
-                cy.terminalError(`Sub-section with name "${subSectionName}" not found.`);
+                cy.task('log', { level: 'error', message: `Sub-section with name "${subSectionName}" not found.` });
                 throw new Error(`Sub-section with name "${subSectionName}" not found.`);
             }
         });
@@ -72,9 +72,9 @@ export class WidgetsPage {
 
     /** Verifies the expanded accordion content includes the expected text. */
     verifyExpectedContentDisplayed(expectedContent: string) {
-        cy.terminalInfo(`Verifying expected content: "${expectedContent.substring(0, 50)}..."`);
+        cy.task('log', { level: 'info', message: `Verifying expected content: "${expectedContent.substring(0, 50)}..."` });
         cy.get(this.widgetsPageLocators.messageContent).invoke('text').then((actualText) => {
-            cy.terminalInfo(`Actual content: "${actualText.substring(0, 50)}..."`);
+            cy.task('log', { level: 'info', message: `Actual content: "${actualText.substring(0, 50)}..."` });
             expect(actualText).to.include(expectedContent.trim());
         });
     }
