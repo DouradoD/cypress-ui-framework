@@ -38,23 +38,23 @@ Feature: Elements
       | Yes        |
       | Impressive |
 
-  @positive
+  @test
   Scenario: Add a new user on the Web Tables
     Given he is on the Elements page
     And he navigates to the "Web Tables" subSection from Elements
     When he adds "1" new user with valid data
     Then the new user should be displayed correctly
 
-  @positive
+  @test
   Scenario: Remove a user from the Web Tables
     Given he is on the Elements page
     And he navigates to the "Web Tables" subSection from Elements
-    And he adds "2" new user with valid data
+    And he adds "3" new user with valid data
     And he removes the new user from the table
     When he searchs for the user deleted
     Then the user should not be displayed in the table
 
-  @positive
+  @test
   Scenario: Add multiple users to the Web Tables
     Given he is on the Elements page
     And he navigates to the "Web Tables" subSection from Elements
@@ -76,7 +76,7 @@ Feature: Elements
     And the Color change button should be displayed in red color
     And the Will enable 5 Seconds button should be enabled
 
-  @test
+  @positive
   Scenario: Download and upload file
     Given he is on the Elements page
     When he navigates to the "Upload and Download" subSection from Elements

@@ -1,16 +1,15 @@
 {
-  "stepDefinitions": ["cypress/support/step_definitions/*.steps.ts"],
+  "stepDefinitions": ["cypress/support/step_definitions/**/*.steps.ts"],
   "messages": {
     "enabled": true,
     "output": "cypress/cucumber-messages/run.ndjson"
   },
-  "json": {
+  "json": { "enabled": false },
+  "html": {
     "enabled": true,
-    "output": "cypress/reports/cucumber-json"
+    "output": "cypress/reports/cucumber-html/cucumber-report.html"
   },
   "filterSpecs": true,
   "omitFiltered": true,
-  "pretty": {
-    "enabled": true
-  }
+  "pretty": { "enabled": true }
 }

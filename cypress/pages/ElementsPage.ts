@@ -149,23 +149,34 @@ export class ElementsPage {
 
     addNewUsersWithValidData(userList: UserInfo[]) {
         userList.forEach(user => {
-            cy.get(this.elementPageLocators.webTableAddNewUserButton).click();
+            this.openNewUserForm();
             this.fillNewUserFormWithValidData(user);
             this.submitNewUserForm();
         });
     }
 
+    openNewUserForm() {
+        cy.get(this.elementPageLocators.webTableAddNewUserButton).should('be.visible').click();
+        cy.get(this.elementPageLocators.webTableFormsModal).should('be.visible');
+        cy.task('log', { level: 'success', message: 'New user form opened' });
+    }
+
     fillNewUserFormWithValidData(user: UserInfo) {
+        cy.task('log', { level: 'info', message: `Filling new user form with data: ${user.firstName}, ${user.lastName}, ${user.email}, ${user.age}, ${user.salary}, ${user.department}` });
         cy.get(this.elementPageLocators.webTableFormFirstNameInput).clear().type(user.firstName);
         cy.get(this.elementPageLocators.webTableFormLastNameInput).clear().type(user.lastName);
         cy.get(this.elementPageLocators.emailInput).clear().type(user.email);
         cy.get(this.elementPageLocators.webTableFormAgeInput).clear().type(user.age);
         cy.get(this.elementPageLocators.webTableFormSalaryInput).clear().type(user.salary);
         cy.get(this.elementPageLocators.webTableFormDepartmentInput).clear().type(user.department);
+        cy.task('log', { level: 'success', message: 'New user form filled' });
     }
 
     submitNewUserForm() {
-        cy.get(this.elementPageLocators.submitButton).click();
+        cy.task('log', { level: 'info', message: 'Submitting new user form' });
+        cy.get(this.elementPageLocators.webTableFormSubmitButton).should('be.visible').should('be.enabled').click();
+        cy.get(this.elementPageLocators.webTableFormsModal).should('not.exist');
+        cy.task('log', { level: 'success', message: 'New user form submitted' });
     }
 
 
@@ -233,7 +244,7 @@ export class ElementsPage {
     downloadFile() {
         cy.get(this.elementPageLocators.downloadFileButton).click();
         // TODO: Check if the file is downloaded
-        if(cy.readFile('cypress/downloads/sampleFile.jpeg').then(file => file.length > 0)) {
+        if (cy.readFile('cypress/downloads/sampleFile.jpeg').then(file => file.length > 0)) {
             cy.task('log', { level: 'success', message: 'File was downloaded' });
         } else {
             cy.task('log', { level: 'error', message: 'File was not downloaded' });

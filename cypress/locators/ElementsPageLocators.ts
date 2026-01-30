@@ -28,6 +28,7 @@ export class ElementsPageLocators {
 
     // web tables locators
     rowsPerPageSelect: string = 'select[aria-label*="rows per page"]';
+    webTableFormsModal: string = 'div[role="dialog"] #userForm';
     webTableSearchInput: string = '#searchBox';
     webTableFormFirstNameInput: string = '#firstName';
     webTableFormLastNameInput: string = '#lastName';

@@ -26,7 +26,7 @@ export class UserManager {
             `User ${randomCode}`,
             `user${randomCode}`,
             `user${randomCode}@example.com`,
-            Math.floor(Math.random() * 100).toString(),
+            Math.floor(18 + Math.random() * 60).toString(),
             Math.floor(Math.random() * 100000).toString(),
             `Department ${randomCode}`
         );

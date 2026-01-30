@@ -1,24 +1,25 @@
 {
   "name": "cypress-qa-framework",
   "version": "1.0.0",
- "scripts": {
+  "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
+    "cy:run:api": "cypress run --spec \"cypress/e2e/api/**/*.spec.ts\"",
+    "cy:run:ui": "cypress run --spec \"cypress/e2e/features/**/*.feature\"",
     "cy:run:all": "cypress run --browser chrome",
-    "cy:clean:reports": "node -e \"const fs=require('fs');const p=require('path');['cypress/reports/cucumber-json','cypress/reports/cucumber-html'].forEach(d=>{if(fs.existsSync(d)){fs.rmSync(d,{recursive:true});console.log('Cleaned '+d)}})\"",
+    "cy:clean:reports": "node -e \"const fs=require('fs');['cypress/reports/cucumber-html','cypress/reports/mochawesome'].forEach(d=>{if(fs.existsSync(d)){try{fs.rmSync(d,{recursive:true});console.log('Cleaned '+d)}catch(e){console.warn('Could not clean '+d+': '+e.message)}}})\"",
     "cy:debug": "node --inspect-brk node_modules/.bin/cypress open",
     "cy:debug:run": "node --inspect node_modules/.bin/cypress run --spec",
     "cy:debug:feature": "node --inspect node_modules/.bin/cypress run --browser chrome --spec",
     "cy:debug:headed": "node --inspect node_modules/.bin/cypress run --browser chrome --headed --spec"
   },
   "devDependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^18.0.6",
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@types/node": "^20.0.0",
     "cypress": "^13.17.0",
     "cypress-mochawesome-reporter": "^3.8.0",
     "dotenv": "^16.3.0",
-    "multiple-cucumber-html-reporter": "^3.5.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.3.0"
   },
@@ -63,6 +64,7 @@
     "debug": "^4.4.3",
     "decamelize": "^4.0.0",
     "diff": "^4.0.4",
+    "drop": "^0.2.6",
     "eastasianwidth": "^0.2.0",
     "ecc-jsbn": "^0.1.2",
     "emoji-regex": "^8.0.0",
@@ -153,6 +155,7 @@
     "tldts": "^6.1.86",
     "tldts-core": "^6.1.86",
     "tmp": "^0.2.5",
+    "to": "^0.2.9",
     "toposort": "^2.0.2",
     "tree-kill": "^1.2.2",
     "tweetnacl": "^0.14.5",
